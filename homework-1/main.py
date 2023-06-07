@@ -3,52 +3,35 @@ import psycopg2
 import csv
 import os
 
-POSTGRES_API_KEY = os.getenv('POSTGRES_API_KEY')
-BASE_PATH = os.path.abspath("north_data")
+POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')  # Пароль через переменные среды
+BASE_PATH = os.path.abspath("north_data")           # Абсолютная версия пути
 
-
-conn = psycopg2.connect(host="localhost", database="north", user="postgres", password=POSTGRES_API_KEY)
+# Подключение к БД Postgres
+conn = psycopg2.connect(host="localhost", database="north", user="postgres", password=POSTGRES_PASSWORD)
 try:
     with conn:
         with conn.cursor() as cur:
 
             # Занесение информации в таблицу "employees"
             with open(os.path.join(BASE_PATH, 'employees_data.csv'), 'r', encoding='utf-8') as csv_file:
-                reader = csv.DictReader(csv_file)
+                reader = csv.reader(csv_file)
+                next(reader)
                 for item in reader:
-                    cur.execute('insert into employees values (%s, %s, %s, %s, %s,%s)',
-                                (
-                                    item['employee_id'],
-                                    item['first_name'],
-                                    item['last_name'],
-                                    item['title'],
-                                    item['birth_date'],
-                                    item['notes']
-                                ))
+                    cur.execute('INSERT INTO employees VALUES (%s, %s, %s, %s, %s, %s)', item)
 
             # Занесение информации в таблицу "customers"
             with open(os.path.join(BASE_PATH, 'customers_data.csv'), 'r', encoding='utf-8') as csv_file:
-                reader = csv.DictReader(csv_file)
+                reader = csv.reader(csv_file)
+                next(reader)
                 for item in reader:
-                    cur.execute('insert into customers values (%s, %s, %s)',
-                                (
-                                    item['customer_id'],
-                                    item['company_name'],
-                                    item['contact_name']
-                                ))
+                    cur.execute('INSERT INTO customers VALUES (%s, %s, %s)', item)
 
             # Занесение информации в таблицу "orders"
             with open(os.path.join(BASE_PATH, 'orders_data.csv'), 'r', encoding='utf-8') as csv_file:
-                reader = csv.DictReader(csv_file)
+                reader = csv.reader(csv_file)
+                next(reader)
                 for item in reader:
-                    cur.execute('insert into orders values (%s, %s, %s, %s, %s)',
-                                (
-                                    item['order_id'],
-                                    item['customer_id'],
-                                    item['employee_id'],
-                                    item['order_date'],
-                                    item['ship_city']
-                                ))
+                    cur.execute('INSERT INTO orders VALUES (%s, %s, %s, %s, %s)', item)
 
 finally:
     conn.close()
