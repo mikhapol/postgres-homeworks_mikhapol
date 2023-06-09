@@ -6,7 +6,8 @@ SELECT * from orders
 SELECT contact_name, country
 FROM customers
 
--- 2. идентификатор заказа и разницу между датами формирования (order_date) заказа и его отгрузкой (shipped_date) из таблицы orders
+-- 2. идентификатор заказа и разницу между датами формирования (order_date)
+    -- заказа и его отгрузкой (shipped_date) из таблицы orders
 SELECT order_id,
 		order_date,
 		shipped_date,
