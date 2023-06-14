@@ -6,7 +6,8 @@ SELECT * from customers
 SELECT * from employees
 SELECT * from shippers
 SELECT * from orders
----------------------------------------SELECT customers.company_name AS Название_компании, CONCAT(first_name, ' ', last_name) AS ФИО_сотрудника
+---------------------------------------
+SELECT customers.company_name AS Название_компании, CONCAT(first_name, ' ', last_name) AS ФИО_сотрудника
 FROM orders
 INNER JOIN customers USING(customer_id)
 INNER JOIN employees USING(employee_id)
